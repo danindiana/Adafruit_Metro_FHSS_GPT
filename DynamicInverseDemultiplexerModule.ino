@@ -1,5 +1,6 @@
 // Include necessary libraries
 #include <SPI.h>
+#include <Wire.h>
 // ... Include other relevant libraries for your RF module and communication protocol.
 
 // Configuration
