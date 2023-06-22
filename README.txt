@@ -114,3 +114,34 @@ Please note that in a real-world implementation, these modules would likely not 
 
 Further work to be done: Generate a detailed proposal for an ESP32 firmware that interfaces with our SAMD51 chipset and satisfies our Frequency-hopping spread spectrum (FHSS) TRANSEC key system requirements.
 
+An inverse multiplexer (often abbreviated to inverse MUX or IMUX) allows a data stream to be broken into multiple lower data rate communication links. An inverse multiplexer differs from a demultiplexer because the multiple output streams from the former stay inter-related, whereas those from the latter are unrelated. An inverse multiplexer is the opposite of a multiplexer in that it divides one high-speed link into multiple low-speed links, whereas a multiplexer combines multiple low-speed links into one high-speed link.
+
+This provides an end to end connection of several times the data rate available on each of the low rate data links. Note that, as with multiplexers, links are often used in bi-directional pairs and, at either end of the link, an inverse multiplexer will be combined with its reverse (an inverse demultiplexer) and still be called an inverse MUX. How might we utilize inverse multiplexing to our Frequency-hopping spread spectrum (FHSS) TRANSEC key system to improve the latter's performance?
+
+Utilizing inverse multiplexing can enhance the performance of the Frequency-hopping spread spectrum (FHSS) TRANSEC key system in several ways:
+
+1. **Increased Throughput**: By splitting a high-data-rate stream into several lower-data-rate streams that can be transmitted in parallel over multiple frequency channels, the effective throughput can be significantly increased. This can be beneficial in applications where higher data rates are required than what a single channel can provide.
+
+2. **Improved Reliability and Redundancy**: By distributing the data over multiple frequency channels, the system can achieve redundancy. If one of the channels experiences interference or noise, the data can still be retrieved from the other channels. This leads to a more robust and reliable communication, which is especially important in a security-related system like TRANSEC.
+
+3. **Enhanced Security**: Distributing data across multiple channels can also enhance security. A would-be eavesdropper would need to intercept and correctly reassemble data from all channels, which is more difficult than intercepting a single channel. When combined with frequency hopping, this makes unauthorized interception even more challenging.
+
+4. **Load Balancing and Channel Utilization**: Inverse multiplexing can enable better load balancing across multiple channels. This is especially useful in FHSS systems where some frequency channels might be more congested or have higher noise levels than others. Distributing the data over multiple channels ensures that no single channel becomes a bottleneck.
+
+5. **Adaptability to Channel Conditions**: The system can adapt the number of channels used for inverse multiplexing based on the channel conditions. For instance, if the channels are relatively noise-free, it can use more channels to maximize throughput. In contrast, if the environment is noisy, it can use fewer channels with more robust error-correcting codes.
+
+To implement inverse multiplexing in the FHSS TRANSEC key system, the following steps can be taken:
+
+1. **Data Splitting**: At the transmitter side, implement an inverse multiplexer module that splits the outbound data into multiple lower data rate streams.
+
+2. **Channel Allocation**: Dynamically allocate multiple frequency channels for transmitting the split data streams. Coordinate this with the frequency hopping algorithm to ensure that the channels are available.
+
+3. **Transmission over Multiple Channels**: Transmit each lower data rate stream over a separate frequency channel.
+
+4. **Data Reassembly**: At the receiver side, implement an inverse demultiplexer module that reassembles the split data streams into the original high-data-rate stream.
+
+5. **Synchronization**: Ensure synchronization between the transmitter and receiver so that the receiver knows how to correctly reassemble the data from the multiple channels.
+
+6. **Error Handling**: Implement error correction and handling mechanisms to manage any data corruption that might occur due to channel noise or interference.
+
+In conclusion, implementing inverse multiplexing in an FHSS TRANSEC key system can significantly enhance throughput, reliability, security, and overall performance, making it well-suited for high-data-rate, secure communication applications.
