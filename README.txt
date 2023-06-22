@@ -111,3 +111,6 @@ To fully implement a Frequency-hopping spread spectrum (FHSS) TRANSEC key system
     Suggested file name: `UserInterface.ino`
 
 Please note that in a real-world implementation, these modules would likely not be stand-alone programs but rather parts of a larger, integrated codebase. Furthermore, this kind of communication system should be developed with a thorough understanding of the legal and regulatory requirements for radio frequency communications in the relevant jurisdictions, as well as best practices for security.
+
+Further work to be done: Generate a detailed proposal for an ESP32 firmware that interfaces with our SAMD51 chipset and satisfies our Frequency-hopping spread spectrum (FHSS) TRANSEC key system requirements.
+
