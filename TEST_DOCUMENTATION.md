@@ -449,6 +449,291 @@ int main(int argc, char **argv) {
 - [NIST Randomness Testing](https://csrc.nist.gov/projects/random-bit-generation/documentation-and-software)
 - [MISRA C Guidelines](https://www.misra.org.uk/)
 
+## Bibliography - Supporting Code Libraries
+
+This section catalogs all major code libraries that support the FHSS TRANSEC system and its test suite.
+
+### Testing Frameworks
+
+#### Unity Test Framework
+- **Repository:** https://github.com/ThrowTheSwitch/Unity
+- **License:** MIT
+- **Purpose:** Lightweight C unit testing framework optimized for embedded systems
+- **Version:** 2.5.x+
+- **Documentation:** http://www.throwtheswitch.org/unity
+- **Usage:** Primary testing framework for all unit tests
+
+#### PlatformIO Core
+- **Website:** https://platformio.org/
+- **Repository:** https://github.com/platformio/platformio-core
+- **License:** Apache 2.0
+- **Purpose:** Cross-platform build system and library manager for embedded development
+- **Version:** 6.x+
+- **Documentation:** https://docs.platformio.org/
+- **Usage:** Build system, test runner, dependency management
+
+### Cryptographic Libraries
+
+#### Crypto (rweather/Crypto)
+- **Repository:** https://github.com/rweather/arduinolibs
+- **License:** Public Domain / MIT
+- **Purpose:** Cryptographic library for Arduino including AES, SHA256, ChaCha, etc.
+- **Components Used:**
+  - AES128, AES192, AES256 (encryption/decryption)
+  - SHA256, SHA512 (hashing)
+  - ChaCha20, Poly1305 (authenticated encryption)
+  - HMAC (message authentication)
+  - RNG (random number generation utilities)
+- **Documentation:** https://rweather.github.io/arduinolibs/crypto.html
+- **PlatformIO:** `rweather/Crypto@^0.4.0`
+
+#### BearSSL
+- **Website:** https://bearssl.org/
+- **Repository:** https://www.bearssl.org/gitweb/?p=BearSSL
+- **License:** MIT
+- **Purpose:** Minimalist SSL/TLS library suitable for embedded systems
+- **Components:**
+  - AES-CTR, AES-GCM
+  - RSA, ECDSA, ECDH
+  - X.509 certificate processing
+  - TLS 1.2 implementation
+- **Documentation:** https://bearssl.org/api1.html
+- **Usage:** Alternative crypto library for production deployment
+
+#### Mbed TLS (ARM)
+- **Repository:** https://github.com/Mbed-TLS/mbedtls
+- **License:** Apache 2.0
+- **Purpose:** Portable cryptographic and SSL/TLS library
+- **Documentation:** https://mbed-tls.readthedocs.io/
+- **Usage:** Enterprise-grade crypto for production systems
+
+### Hardware & Platform Libraries
+
+#### Adafruit SAMD Boards
+- **Repository:** https://github.com/adafruit/ArduinoCore-samd
+- **License:** LGPL 2.1
+- **Purpose:** Arduino core for SAMD21/SAMD51 processors (Metro M4)
+- **Features:**
+  - TRNG (True Random Number Generator) access
+  - DMA support
+  - USB, SPI, I2C, UART drivers
+- **Installation:** https://learn.adafruit.com/adafruit-metro-m4-express-featuring-atsamd51/setup
+- **Board Manager URL:** https://adafruit.github.io/arduino-board-index/package_adafruit_index.json
+
+#### Adafruit Zero DMA Library
+- **Repository:** https://github.com/adafruit/Adafruit_ZeroDMA
+- **License:** MIT
+- **Purpose:** DMA (Direct Memory Access) library for SAMD21/SAMD51
+- **Usage:** High-speed data transfers for SPI/UART
+- **PlatformIO:** `adafruit/Adafruit Zero DMA Library@^1.1.0`
+
+### Communication Libraries
+
+#### Arduino SPI Library
+- **Repository:** https://github.com/arduino/ArduinoCore-API/tree/master/api/SPI
+- **License:** LGPL
+- **Purpose:** Serial Peripheral Interface communication
+- **Documentation:** https://www.arduino.cc/en/reference/SPI
+- **Usage:** Key exchange between master/slave devices
+
+#### Arduino Wire Library (I2C)
+- **Repository:** https://github.com/arduino/ArduinoCore-API/tree/master/api/Wire
+- **License:** LGPL
+- **Purpose:** I2C (Inter-Integrated Circuit) communication
+- **Documentation:** https://www.arduino.cc/en/reference/wire
+- **Usage:** Alternative inter-device communication
+
+#### ESP32 Arduino Core
+- **Repository:** https://github.com/espressif/arduino-esp32
+- **License:** LGPL 2.1
+- **Purpose:** Arduino core for ESP32 (RF module)
+- **Features:**
+  - WiFi (802.11 b/g/n)
+  - Bluetooth Classic & BLE
+  - SPI slave/master
+- **Documentation:** https://docs.espressif.com/projects/arduino-esp32/
+- **Board Manager URL:** https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+
+#### WiFi Library (ESP32)
+- **Repository:** https://github.com/espressif/arduino-esp32/tree/master/libraries/WiFi
+- **License:** LGPL 2.1
+- **Purpose:** WiFi networking for ESP32
+- **Documentation:** https://docs.espressif.com/projects/arduino-esp32/en/latest/api/wifi.html
+- **Usage:** RF communication module
+
+#### AdafruitIO WiFi
+- **Repository:** https://github.com/adafruit/Adafruit_IO_Arduino
+- **License:** MIT
+- **Purpose:** Adafruit IO cloud service integration
+- **Documentation:** https://learn.adafruit.com/welcome-to-adafruit-io
+- **PlatformIO:** `adafruit/Adafruit IO Arduino@^4.2.0`
+
+### Error Correction Libraries
+
+#### Reed-Solomon Error Correction
+- **Repository:** https://github.com/simonyipeter/Arduino-FEC
+- **License:** MIT
+- **Purpose:** Forward Error Correction for data transmission
+- **Algorithms:** Reed-Solomon RS(255,223), RS(255,239)
+- **Usage:** Error correction for inverse demultiplexer module
+
+#### ArduinoRS485
+- **Repository:** https://github.com/arduino-libraries/ArduinoRS485
+- **License:** LGPL
+- **Purpose:** RS485 communication with error detection
+- **Usage:** Robust serial communication alternative
+
+### Utility Libraries
+
+#### ArduinoJson
+- **Repository:** https://github.com/bblanchon/ArduinoJson
+- **License:** MIT
+- **Purpose:** JSON parsing and serialization
+- **Version:** 6.x+
+- **Documentation:** https://arduinojson.org/
+- **PlatformIO:** `bblanchon/ArduinoJson@^6.21.0`
+- **Usage:** Configuration management, data serialization
+
+#### Time (Arduino)
+- **Repository:** https://github.com/PaulStoffregen/Time
+- **License:** LGPL
+- **Purpose:** Timekeeping and RTC management
+- **Documentation:** https://www.pjrc.com/teensy/td_libs_Time.html
+- **Usage:** Synchronization timing
+
+#### CRC Library
+- **Repository:** https://github.com/RobTillaart/CRC
+- **License:** MIT
+- **Purpose:** Various CRC algorithms (CRC8, CRC16, CRC32)
+- **Algorithms:** CRC-CCITT, CRC-16-IBM, CRC-32
+- **PlatformIO:** `robtillaart/CRC@^1.0.0`
+- **Usage:** Packet integrity checking
+
+### Security & Standards Libraries
+
+#### OpenSSL (Reference Implementation)
+- **Website:** https://www.openssl.org/
+- **Repository:** https://github.com/openssl/openssl
+- **License:** Apache 2.0
+- **Purpose:** Industry-standard crypto library (reference for embedded implementations)
+- **Note:** Not used directly in embedded systems, but standards reference
+
+#### libsodium (Reference)
+- **Website:** https://libsodium.gitbook.io/doc/
+- **Repository:** https://github.com/jedisct1/libsodium
+- **License:** ISC
+- **Purpose:** Modern, easy-to-use crypto library
+- **Note:** Inspiration for secure random number generation patterns
+
+### Development & Analysis Tools
+
+#### GNU Arm Embedded Toolchain
+- **Website:** https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain
+- **Purpose:** Compiler, linker, debugger for ARM Cortex-M processors
+- **Version:** 10.x+ (arm-none-eabi-gcc)
+- **Usage:** Compiling for Metro M4 (SAMD51)
+
+#### gcov/lcov (Code Coverage)
+- **gcov:** https://gcc.gnu.org/onlinedocs/gcc/Gcov.html
+- **lcov:** https://github.com/linux-test-project/lcov
+- **License:** GPL
+- **Purpose:** Code coverage analysis
+- **Usage:** Future enhancement for coverage metrics
+
+#### Valgrind (Memory Analysis)
+- **Website:** https://valgrind.org/
+- **Repository:** https://sourceware.org/git/valgrind.git
+- **License:** GPL
+- **Purpose:** Memory leak detection and profiling
+- **Usage:** Native test environment memory analysis
+
+### NIST Standards & Test Suites
+
+#### NIST Statistical Test Suite (SP 800-22)
+- **Website:** https://csrc.nist.gov/projects/random-bit-generation/documentation-and-software
+- **Purpose:** Randomness testing for TRNG validation
+- **Tests:** 15 statistical tests for RNG quality
+- **Usage:** Production TRNG validation (future)
+
+#### NIST Cryptographic Algorithm Validation Program (CAVP)
+- **Website:** https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program
+- **Purpose:** Validation of cryptographic implementations
+- **Standards:** FIPS 140-2, FIPS 197 (AES)
+
+### Research & Academic References
+
+#### "Frequency Hopping Spread Spectrum" (Peterson, Ziemer, Borth)
+- **Publication:** Digital Communications and Spread Spectrum Systems
+- **Publisher:** McGraw-Hill
+- **ISBN:** 978-0070661615
+- **Relevance:** FHSS theory and implementation
+
+#### "Applied Cryptography" (Bruce Schneier)
+- **Publisher:** Wiley
+- **ISBN:** 978-1119096726
+- **Edition:** 2nd Edition (2015)
+- **Relevance:** Cryptographic protocols and algorithms
+
+#### "Wireless Communications and Networks" (Stallings)
+- **Publisher:** Pearson
+- **ISBN:** 978-0132439220
+- **Relevance:** Synchronization and error correction
+
+### Protocol & Standards Documentation
+
+#### IEEE 802.15.4 (Frequency Hopping)
+- **Website:** https://standards.ieee.org/standard/802_15_4-2020.html
+- **Purpose:** Standard for low-rate wireless networks with FHSS
+- **Relevance:** Frequency hopping protocol reference
+
+#### MIL-STD-188 (Military Communications)
+- **Purpose:** Military frequency hopping standards
+- **Relevance:** TRANSEC key management patterns
+
+## Library Dependency Matrix
+
+| Module | Primary Libraries | Testing Libraries |
+|--------|------------------|-------------------|
+| **TRNG/Key Gen** | Adafruit SAMD Core | Unity, Mock TRNG |
+| **Encryption** | rweather/Crypto, BearSSL | Unity, Mock AES |
+| **Authentication** | rweather/Crypto (SHA256) | Unity |
+| **Synchronization** | Time, Arduino Core | Unity, Mock Time |
+| **Error Handling** | CRC Library | Unity |
+| **Key Exchange** | Arduino SPI | Unity, Mock SPI |
+| **RF Communication** | ESP32 WiFi, AdafruitIO | Unity (future) |
+| **Multiplexing** | Arduino Core | Unity, std::vector |
+
+## Installation Guide
+
+### PlatformIO Library Installation
+
+Add to `platformio.ini`:
+
+```ini
+[env:metro_m4]
+lib_deps =
+    adafruit/Adafruit Zero DMA Library @ ^1.1.0
+    rweather/Crypto @ ^0.4.0
+    bblanchon/ArduinoJson @ ^6.21.0
+    robtillaart/CRC @ ^1.0.0
+    adafruit/Adafruit IO Arduino @ ^4.2.0
+```
+
+### Arduino IDE Library Installation
+
+1. **Board Support:**
+   - File → Preferences → Additional Board Manager URLs
+   - Add: `https://adafruit.github.io/arduino-board-index/package_adafruit_index.json`
+   - Tools → Board → Boards Manager → Install "Adafruit SAMD Boards"
+
+2. **Libraries:**
+   - Sketch → Include Library → Manage Libraries
+   - Search and install:
+     - "Crypto" by rweather
+     - "Adafruit Zero DMA"
+     - "ArduinoJson"
+     - "CRC" by Rob Tillaart
+
 ## Contact and Support
 
 For questions about the test suite:
