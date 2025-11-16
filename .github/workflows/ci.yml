@@ -1,0 +1,275 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  # Native unit tests (fast, no hardware required)
+  test-native:
+    name: Native Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Cache PlatformIO
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.platformio/.cache
+          ~/.platformio/packages
+          ~/.platformio/platforms
+        key: ${{ runner.os }}-pio-${{ hashFiles('**/platformio.ini') }}
+        restore-keys: |
+          ${{ runner.os }}-pio-
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install PlatformIO
+      run: |
+        python -m pip install --upgrade pip
+        pip install platformio
+
+    - name: Run native tests
+      run: pio test -e native -v
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results-native
+        path: .pio/test/
+
+  # Build check for Metro M4
+  build-metro-m4:
+    name: Build for Metro M4
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Cache PlatformIO
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.platformio/.cache
+          ~/.platformio/packages
+          ~/.platformio/platforms
+        key: ${{ runner.os }}-pio-${{ hashFiles('**/platformio.ini') }}
+        restore-keys: |
+          ${{ runner.os }}-pio-
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install PlatformIO
+      run: |
+        python -m pip install --upgrade pip
+        pip install platformio
+
+    - name: Build for Metro M4
+      run: pio run -e metro_m4
+
+    - name: Upload firmware
+      uses: actions/upload-artifact@v3
+      with:
+        name: firmware-metro-m4
+        path: .pio/build/metro_m4/firmware.*
+
+  # Code quality checks
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Check file formatting
+      run: |
+        # Check for trailing whitespace
+        ! git grep -I '\s\+$' -- '*.ino' '*.cpp' '*.h'
+
+    - name: Check line endings
+      run: |
+        # Ensure consistent line endings
+        find . -name "*.ino" -o -name "*.cpp" -o -name "*.h" | \
+          xargs file | grep CRLF && exit 1 || exit 0
+
+    - name: Verify file structure
+      run: |
+        # Check that all modules are in correct directories
+        test -d src/core
+        test -d src/communication
+        test -d src/synchronization
+        test -d src/inverse_multiplexing
+        test -d src/security
+        test -d src/interface
+        test -d docs
+        test -d examples
+
+  # Documentation checks
+  docs-check:
+    name: Documentation Check
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Check for README files
+      run: |
+        # Verify README exists in key directories
+        test -f README.md
+        test -f CONTRIBUTING.md
+        test -f LICENSE
+        test -f src/core/README.md
+        test -f src/communication/README.md
+        test -f src/synchronization/README.md
+        test -f src/inverse_multiplexing/README.md
+        test -f src/security/README.md
+        test -f src/interface/README.md
+        test -f examples/README.md
+
+    - name: Check for broken links
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-quiet-mode: 'yes'
+        config-file: '.github/workflows/markdown-link-check-config.json'
+
+  # Examples compilation check
+  examples-check:
+    name: Examples Compilation
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        example:
+          - BasicFHSS
+          - MasterSlaveKeyExchange
+          - SecureTransmission
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Cache PlatformIO
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.platformio/.cache
+          ~/.platformio/packages
+          ~/.platformio/platforms
+        key: ${{ runner.os }}-pio-${{ hashFiles('**/platformio.ini') }}
+        restore-keys: |
+          ${{ runner.os }}-pio-
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install PlatformIO
+      run: |
+        python -m pip install --upgrade pip
+        pip install platformio
+
+    - name: Compile ${{ matrix.example }}
+      run: |
+        # Create temporary platformio.ini for example
+        cd examples/${{ matrix.example }}
+        cat > platformio.ini << EOF
+        [env:metro_m4]
+        platform = atmelsam
+        board = adafruit_metro_m4
+        framework = arduino
+        lib_deps =
+            adafruit/Adafruit Zero DMA Library
+            rweather/Crypto
+            bblanchon/ArduinoJson
+        EOF
+        pio run
+
+  # Security checks
+  security-check:
+    name: Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Check for hardcoded secrets
+      run: |
+        # Look for common patterns of hardcoded secrets
+        ! git grep -i 'password\s*=' -- '*.ino' '*.cpp' '*.h'
+        ! git grep -i 'secret\s*=' -- '*.ino' '*.cpp' '*.h'
+        ! git grep -E '[0-9a-fA-F]{32}' -- '*.ino' '*.cpp' '*.h' || echo "Warning: Found hex strings that might be keys"
+
+    - name: Check for TODO security items
+      run: |
+        # Warn about security TODOs
+        git grep -i 'TODO.*security' -- '*.ino' '*.cpp' '*.h' || true
+        git grep -i 'FIXME.*crypto' -- '*.ino' '*.cpp' '*.h' || true
+
+  # Create release artifacts on tag
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [test-native, build-metro-m4, code-quality, docs-check, examples-check]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Cache PlatformIO
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.platformio/.cache
+          ~/.platformio/packages
+          ~/.platformio/platforms
+        key: ${{ runner.os }}-pio-${{ hashFiles('**/platformio.ini') }}
+        restore-keys: |
+          ${{ runner.os }}-pio-
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install PlatformIO
+      run: |
+        python -m pip install --upgrade pip
+        pip install platformio
+
+    - name: Build release firmware
+      run: pio run -e metro_m4
+
+    - name: Create release archive
+      run: |
+        mkdir -p release
+        cp .pio/build/metro_m4/firmware.hex release/
+        cp .pio/build/metro_m4/firmware.elf release/
+        cp README.md release/
+        cp LICENSE release/
+        tar -czf release.tar.gz release/
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: release.tar.gz
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
