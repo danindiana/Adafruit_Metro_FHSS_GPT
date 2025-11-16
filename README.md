@@ -1,5 +1,16 @@
 # Adafruit Metro FHSS TRANSEC System
 
+[![CI](https://github.com/danindiana/Adafruit_Metro_FHSS_GPT/workflows/CI/badge.svg)](https://github.com/danindiana/Adafruit_Metro_FHSS_GPT/actions)
+[![PlatformIO](https://img.shields.io/badge/PlatformIO-Compatible-orange.svg)](https://platformio.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Hardware](https://img.shields.io/badge/Hardware-Adafruit%20Metro%20M4-blue.svg)](https://www.adafruit.com/product/3382)
+[![Platform](https://img.shields.io/badge/Platform-SAMD51-green.svg)](https://www.microchip.com/en-us/product/ATSAMD51J19A)
+[![Framework](https://img.shields.io/badge/Framework-Arduino-00979D.svg)](https://www.arduino.cc/)
+[![Language](https://img.shields.io/badge/Language-C%2B%2B-blue.svg)](https://isocpp.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Documentation](https://img.shields.io/badge/docs-comprehensive-brightgreen.svg)](docs/)
+[![Examples](https://img.shields.io/badge/examples-3-blue.svg)](examples/)
+
 A Frequency-Hopping Spread Spectrum (FHSS) TRANSEC key system for Adafruit Metro M4 boards using the SAMD51's True Random Number Generator (TRNG).
 
 ## Table of Contents
